@@ -10,4 +10,9 @@
         provides="Products.GenericSetup.interfaces.EXTENSION"
         />
 
+    <subscriber
+        for="ZPublisher.interfaces.IPubAfterTraversal"
+        handler=".traversalhook.InactiveProtector"
+        />
+
 </configure>
