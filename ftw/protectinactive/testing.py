@@ -21,7 +21,7 @@ class FtwLayer(PloneSandboxLayer):
             '</configure>',
             context=configurationContext)
 
-        z2.installProduct(app, 'ftw.simplelayout')
+        z2.installProduct(app, 'Products.DateRecurringIndex')
 
     def setUpPloneSite(self, portal):
         applyProfile(portal, 'ftw.protectinactive:default')

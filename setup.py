@@ -46,10 +46,11 @@ setup(
     zip_safe=False,
 
     install_requires=[
-        'setuptools',
-        'plone.dexterity',
-        'plone.app.dexterity',
         'Plone',
+        'plone.api',
+        'plone.app.dexterity',
+        'plone.dexterity',
+        'setuptools',
     ],
 
     tests_require=tests_require,
