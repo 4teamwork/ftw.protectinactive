@@ -3,28 +3,28 @@ ftw.protectinactive
 
 ``ftw.protectinactive`` protects inactive content form unauthorized access.
 
-Plone provides fields to set a publication and expiration dates.
+Plone provides fields to set publication and expiration dates.
 If the publication date is in the future or the expiration date is in the past the content is inactive.
 This inactive state determines if the content should appear on the site or not.
 
 **The problem is that this check is only performed on the catalog.**
 
 It works for listings and all other instances where catalog queries are used.
-But it would not work if e.g. the content is accessed directly via the url.
-An unauthorized user would be able to access the content whether it is unreleased or not.
+But it does not protect the content from beeing accessed directly via the url.
+An unauthorized user is able to access the content whether it is inactive or not.
 This behaviour is highly unintuitive and is often met with incomprehension.
 
 ``ftw.protectinactive`` was created to protect inactive content and provide the expected behaviour.
 It performs the check for inactive content in a ``IPubAfterTraversal`` hook.
-If the content is inactive and the user has no permission to see it ``ftw.protectinactive``
+If the content is inactive and the user has no permission to see it, ``ftw.protectinactive``
 raises an exception.
 
 
 Features
 --------
 * check if content is inactive
-* supports archetypes and dexterity content
-* respects ``Access inactive portal content`` and ``Access future portal content`` permissions
+* supports Archetypes and Dexterity content
+* respects ``Access inactive portal content`` and ``Access future portal content`` permissions (on site root)
 * configurable exception type
 
 
@@ -44,10 +44,10 @@ Installation
 Configuration
 -------------
 
-The exception raised by ``ftw.protectinactive`` can be configures in the plone registry.
-It will raise an ``Unauthorized`` exception by default. This however confirms the
+The exception raised by ``ftw.protectinactive`` can be configured in the plone registry.
+It will raise an ``Unauthorized`` exception by default. This, however, confirms the
 existence of the content, which is a potential unwanted information disclosure.
-To avoid this the exception can be changed to an ``NotFound`` exception in the registry.
+To avoid this the exception can be changed to a ``NotFound`` exception in the registry.
 
 
 Installation local development-environment
