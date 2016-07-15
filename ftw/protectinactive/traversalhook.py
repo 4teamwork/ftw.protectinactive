@@ -1,6 +1,8 @@
 from AccessControl.unauthorized import Unauthorized
 from DateTime import DateTime
+from ftw.protectinactive.registry import IProtectInactiveSettings
 from plone.app.dexterity.behaviors.metadata import IPublication
+from plone.dexterity.interfaces import IDexterityContent
 from plone import api
 from Products.ATContentTypes.interfaces.interfaces import IATContentType
 from Products.CMFCore.interfaces import IContentish
@@ -21,11 +23,12 @@ def InactiveProtector(event):
     if api.user.has_permission('Modify portal content', obj=context):
         return
 
-    # check expiration
     publication_date, expiration_date = getPublicationDates(context)
 
     if isUnreleased(publication_date) or isExpired(expiration_date):
-        exception_type = api.portal.get_registry_record('ftw.protectinactive.registry.IProtectInactiveSettings.exception_type')
+        # raise configured exception
+        exception_type = api.portal.get_registry_record(
+            name='exception_type', interface=IProtectInactiveSettings)
         exception = {
             'Unauthorized': Unauthorized,
             'NotFound': NotFound
@@ -60,7 +63,7 @@ def getPublicationDates(context):
     """
     if IATContentType.providedBy(context):
         return getATPublicationDates(context)
-    elif False:  # TODO: check for DX
+    elif IDexterityContent.providedBy(context):
         return getDXPublicationDates(context)
 
     return None, None
@@ -76,8 +79,16 @@ def getATPublicationDates(context):
 
 
 def getDXPublicationDates(context):
-    # TODO: do
-    pass
+    try:
+        publication = IPublication(context)
+    except TypeError:  # IPublication is not supported
+        return None, None
+
+    effective = publication.effective
+    expiration = publication.expires
+
+    # convert from datetime to DateTime as used by archetypes
+    return DateTime(effective), DateTime(expiration)
 
 
 def findContext(request):
