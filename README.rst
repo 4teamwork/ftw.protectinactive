@@ -22,10 +22,10 @@ raises an exception.
 
 Features
 --------
-  * check if content is inactive
-  * supports archetypes and dexterity content
-  * respects ``Access inactive portal content`` and ``Access future portal content`` permissions
-  * configurable exception type
+* check if content is inactive
+* supports archetypes and dexterity content
+* respects ``Access inactive portal content`` and ``Access future portal content`` permissions
+* configurable exception type
 
 
 Installation
@@ -33,6 +33,7 @@ Installation
 - Add ``ftw.protectinactive`` to your buildout configuration:
 
 ::
+
     [instance]
     eggs +=
         ftw.protectinactive
