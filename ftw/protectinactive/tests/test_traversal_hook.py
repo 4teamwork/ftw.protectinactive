@@ -148,3 +148,20 @@ class TestTraversalHook(FunctionalTestCase):
             browser.open(self.past_atfolder)
         with self.assertRaises(Unauthorized):
             browser.open(self.past_dxfolder)
+
+    @browsing
+    def test_user_can_access_active_content_within_an_inactive_container(self, browser):
+        self.nested_atfolder = create(Builder('folder')
+                                      .within(self.past_atfolder))
+        self.nested_dxfolder = create(Builder('dx folder')
+                                      .within(self.past_dxfolder))
+
+        user = create(Builder('user'))
+        browser.login(user.getId())
+
+        try:
+            browser.open(self.nested_atfolder)
+            browser.open(self.nested_dxfolder)
+        except Unauthorized:
+            self.fail("User has to be able to access active content within "
+                      "an inactive container.")
