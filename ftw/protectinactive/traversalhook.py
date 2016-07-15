@@ -12,11 +12,11 @@ from zope.component.hooks import getSite
 def InactiveProtector(event):
     """ Protect inactive content from unauthorized access. """
 
-    context = findContext(event.request)
-
     site = getSite()
     if not site:
         return
+
+    context = findContext(event.request)
 
     if api.user.has_permission('Modify portal content', obj=context):
         return
