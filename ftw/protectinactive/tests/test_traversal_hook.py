@@ -1,10 +1,12 @@
 from AccessControl import Unauthorized
 from DateTime.DateTime import DateTime
+from datetime import datetime
+from datetime import timedelta
 from ftw.builder import Builder
 from ftw.builder import create
+from ftw.protectinactive.tests.dx_folder import setup_dx_folder
 from ftw.protectinactive.tests import FunctionalTestCase
 from ftw.testbrowser import browsing
-from ftw.protectinactive.tests.dx_folder import setup_dx_folder
 import transaction
 
 
@@ -22,34 +24,40 @@ class TestTraversalHook(FunctionalTestCase):
         self.no_dates_dxfolder = create(Builder('dx folder'))
 
         # active
-        effective = DateTime() - 10
-        expires = DateTime() + 10
+        ateffective = DateTime() - 10
+        atexpiration = DateTime() + 10
+        dxeffective = datetime.now() - timedelta(days=10)
+        dxexpiration = datetime.now() + timedelta(days=10)
         self.active_atfolder = create(Builder('folder')
-                                      .having(effectiveDate=effective,
-                                              expirationDate=expires))
+                                      .having(effectiveDate=ateffective,
+                                              expirationDate=atexpiration))
         self.active_dxfolder = create(Builder('dx folder')
-                                      .having(effectiveDate=effective,
-                                              expirationDate=expires))
+                                      .having(effective=dxeffective,
+                                              expires=dxexpiration))
 
         # past content
-        effective = DateTime() - 20
-        expires = DateTime() - 10
+        ateffective = DateTime() - 20
+        atexpiration = DateTime() - 10
+        dxeffective = datetime.now() - timedelta(days=20)
+        dxexpiration = datetime.now() - timedelta(days=10)
         self.past_atfolder = create(Builder('folder')
-                                    .having(effectiveDate=effective,
-                                            expirationDate=expires))
+                                    .having(effectiveDate=ateffective,
+                                            expirationDate=atexpiration))
         self.past_dxfolder = create(Builder('dx folder')
-                                    .having(effectiveDate=effective,
-                                            expirationDate=expires))
+                                    .having(effective=dxeffective,
+                                            expires=dxexpiration))
 
         # future content
-        effective = DateTime() + 10
-        expires = DateTime() + 20
+        ateffective = DateTime() + 10
+        atexpiration = DateTime() + 20
+        dxeffective = datetime.now() + timedelta(days=10)
+        dxexpiration = datetime.now() + timedelta(days=20)
         self.future_atfolder = create(Builder('folder')
-                                      .having(effectiveDate=effective,
-                                              expirationDate=expires))
+                                      .having(effectiveDate=ateffective,
+                                              expirationDate=atexpiration))
         self.future_dxfolder = create(Builder('dx folder')
-                                      .having(effectiveDate=effective,
-                                              expirationDate=expires))
+                                      .having(effective=dxeffective,
+                                              expires=dxexpiration))
 
     @browsing
     def test_manager_can_access_everything(self, browser):
@@ -128,6 +136,7 @@ class TestTraversalHook(FunctionalTestCase):
         user = create(Builder('user'))
         browser.login(user.getId())
         self.portal.manage_permission('Access future portal content', user.getRoles())
+        transaction.commit()
 
         try:
             browser.open(self.future_atfolder)
