@@ -5,6 +5,7 @@ from plone import api
 from Products.ATContentTypes.interfaces.interfaces import IATContentType
 from Products.CMFCore.interfaces import IContentish
 from Products.CMFCore.interfaces import ISiteRoot
+from zExceptions import NotFound
 from zope.component.hooks import getSite
 
 
@@ -17,45 +18,64 @@ def InactiveProtector(event):
     if not site:
         return
 
-    if not isInactive(context):
-        return
-
     if api.user.has_permission('Modify portal content', obj=context):
         return
 
-    if api.user.has_permission('Access inactive portal content'):
-        return
+    # check expiration
+    publication_date, expiration_date = getPublicationDates(context)
 
-    raise Unauthorized()
+    if isUnreleased(publication_date) or isExpired(expiration_date):
+        exception_type = api.portal.get_registry_record('ftw.protectinactive.registry.IProtectInactiveSettings.exception_type')
+        exception = {
+            'Unauthorized': Unauthorized,
+            'NotFound': NotFound
+        }.get(exception_type, NotImplementedError)
+
+        raise exception()
 
 
-def isInactive(obj):
-    publication_date, expiration_date = getPublicationDates(obj)
+def isUnreleased(publication_date):
+    """ Checks if the publication date is in the future.
+        If it is it checks if the user has access to unreleased content.
+    """
     now = DateTime()
+    return (publication_date and
+            now < publication_date and
+            not api.user.has_permission('Access inactive portal content'))
 
-    return publication_date and now < publication_date or \
-        expiration_date and now > expiration_date
+
+def isExpired(expiration_date):
+    """ Checks if the expiration date has been exceeded.
+        If it is it check if the user has access to expired content.
+    """
+    now = DateTime()
+    return (expiration_date and
+            now > expiration_date and
+            not api.user.has_permission('Access future portal content'))
 
 
-def getPublicationDates(obj):
-    if IATContentType.providedBy(obj):
-        return getATPublicationDates(obj)
+def getPublicationDates(context):
+    """ Returns the publication and the expiration dates.
+        This method supports both archetypes and dexterity content.
+    """
+    if IATContentType.providedBy(context):
+        return getATPublicationDates(context)
     elif False:  # TODO: check for DX
-        return getDXPublicationDates(obj)
+        return getDXPublicationDates(context)
 
     return None, None
 
 
-def getATPublicationDates(obj):
-    if not hasattr(obj, 'Schema'):
+def getATPublicationDates(context):
+    if not hasattr(context, 'Schema'):
         return None, None
 
-    effective = obj.Schema().getField('effectiveDate').get(obj)
-    expiration = obj.Schema().getField('expirationDate').get(obj)
+    effective = context.Schema().getField('effectiveDate').get(context)
+    expiration = context.Schema().getField('expirationDate').get(context)
     return effective, expiration
 
 
-def getDXPublicationDates(obj):
+def getDXPublicationDates(context):
     # TODO: do
     pass
 
