@@ -44,7 +44,7 @@ def isUnreleased(publication_date):
     now = DateTime()
     return (publication_date and
             now < publication_date and
-            not api.user.has_permission('Access inactive portal content'))
+            not api.user.has_permission('Access future portal content'))
 
 
 def isExpired(expiration_date):
@@ -54,7 +54,7 @@ def isExpired(expiration_date):
     now = DateTime()
     return (expiration_date and
             now > expiration_date and
-            not api.user.has_permission('Access future portal content'))
+            not api.user.has_permission('Access inactive portal content'))
 
 
 def getPublicationDates(context):
@@ -88,7 +88,8 @@ def getDXPublicationDates(context):
     expiration = publication.expires
 
     # convert from datetime to DateTime as used by archetypes
-    return DateTime(effective), DateTime(expiration)
+    return DateTime(effective) if effective else None, \
+           DateTime(expiration) if expiration else None
 
 
 def findContext(request):
