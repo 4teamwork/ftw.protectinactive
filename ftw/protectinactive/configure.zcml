@@ -15,7 +15,7 @@
 
     <subscriber
         for="ZPublisher.interfaces.IPubAfterTraversal"
-        handler=".traversalhook.InactiveProtector"
+        handler=".traversalhook.protect_incative_hook"
         />
 
 </configure>

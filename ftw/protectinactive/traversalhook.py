@@ -11,7 +11,7 @@ from zExceptions import NotFound
 from zope.component.hooks import getSite
 
 
-def InactiveProtector(event):
+def protect_incative_hook(event):
     """ Protect inactive content from unauthorized access. """
 
     site = getSite()
