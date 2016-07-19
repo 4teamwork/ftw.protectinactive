@@ -79,9 +79,8 @@ def getATPublicationDates(context):
 
 
 def getDXPublicationDates(context):
-    try:
-        publication = IPublication(context)
-    except TypeError:  # IPublication is not supported
+    publication = IPublication(context, None)
+    if not publication:  # IPublication is not supported
         return None, None
 
     effective = publication.effective
