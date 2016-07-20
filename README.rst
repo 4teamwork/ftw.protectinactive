@@ -1,7 +1,7 @@
 ftw.protectinactive
 ===================
 
-``ftw.protectinactive`` protects inactive content form unauthorized access.
+``ftw.protectinactive`` protects inactive content from unauthorized access.
 
 Plone provides fields to set publication and expiration dates.
 If the publication date is in the future or the expiration date is in the past the content is inactive.
