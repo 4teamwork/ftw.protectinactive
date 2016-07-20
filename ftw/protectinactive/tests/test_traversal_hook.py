@@ -14,7 +14,6 @@ class TestTraversalHook(FunctionalTestCase):
 
     def setUp(self):
         super(TestTraversalHook, self).setUp()
-        self.portal = self.layer['portal']
         self.grant('Manager')
 
         setup_dx_folder(self.portal)
