@@ -26,7 +26,7 @@ setup(
     # http://www.python.org/pypi?%3Aaction=list_classifiers
     classifiers=[
         'Framework :: Plone',
-        'Framework :: Plone :: 4.3.9',
+        'Framework :: Plone :: 4.3',
         'License :: OSI Approved :: GNU General Public License (GPL)',
         'Programming Language :: Python',
         'Programming Language :: Python :: 2.7',
