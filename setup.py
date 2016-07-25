@@ -20,7 +20,7 @@ extras_require = {
 setup(
     name='ftw.protectinactive',
     version=version,
-    description='ftw.protectinactive',
+    description='Protects inactive plone content from unauthorized access.',
     long_description=open('README.rst').read() + '\n' + open(
         os.path.join('docs', 'HISTORY.txt')).read(),
 
