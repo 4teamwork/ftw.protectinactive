@@ -1,0 +1,14 @@
+Changelog
+=========
+
+
+1.0.1 (unreleased)
+------------------
+
+- Specify required plone.api version. [lknoepfel]
+
+
+1.0.0 (2016-07-20)
+--------------------
+
+- Initial implementation and first release. [lknoepfel]
