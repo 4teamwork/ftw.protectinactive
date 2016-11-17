@@ -49,7 +49,7 @@ setup(
 
     install_requires=[
         'Plone',
-        'plone.api>=1.3',
+        'plone.api>=1.4.11',
         'plone.app.dexterity',
         'plone.dexterity',
         'setuptools',

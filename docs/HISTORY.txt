@@ -5,6 +5,10 @@ Changelog
 1.0.2 (unreleased)
 ------------------
 
+- plone.api 1.4.11 is needed at least:
+  See https://github.com/plone/plone.api/blob/1.4.11/docs/CHANGES.rst#1411-2016-01-08
+  [mathias.leimgruber]
+
 - Updated description in setup.py. [lknoepfel]
 
 
