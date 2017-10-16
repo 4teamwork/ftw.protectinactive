@@ -5,6 +5,8 @@ Changelog
 1.0.2 (unreleased)
 ------------------
 
+- Fix failing tests because of recent changes in "ftw.testbrowser". [mbaechtold]
+
 - Test against Plone 4.2. [mbaechtold]
 
 - plone.api 1.4.11 is needed at least:

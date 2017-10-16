@@ -7,7 +7,7 @@ maintainer = '4teamwork'
 tests_require = [
     'ftw.builder',
     'ftw.testing',
-    'ftw.testbrowser',
+    'ftw.testbrowser >= 1.23.0',
     'plone.app.testing',
     'plone.testing',
 ]

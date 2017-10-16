@@ -103,13 +103,13 @@ class TestTraversalHook(FunctionalTestCase):
         except Unauthorized:
             self.fail("A normal user has to be able to access active content.")
 
-        with self.assertRaises(Unauthorized):
+        with browser.expect_unauthorized():
             browser.open(self.past_atfolder)
-        with self.assertRaises(Unauthorized):
+        with browser.expect_unauthorized():
             browser.open(self.past_dxfolder)
-        with self.assertRaises(Unauthorized):
+        with browser.expect_unauthorized():
             browser.open(self.future_atfolder)
-        with self.assertRaises(Unauthorized):
+        with browser.expect_unauthorized():
             browser.open(self.future_dxfolder)
 
     @browsing
@@ -125,9 +125,9 @@ class TestTraversalHook(FunctionalTestCase):
         except Unauthorized:
             self.fail("User has inactive rights but can't access inactive content.")
 
-        with self.assertRaises(Unauthorized):
+        with browser.expect_unauthorized():
             browser.open(self.future_atfolder)
-        with self.assertRaises(Unauthorized):
+        with browser.expect_unauthorized():
             browser.open(self.future_dxfolder)
 
     @browsing
@@ -143,9 +143,9 @@ class TestTraversalHook(FunctionalTestCase):
         except Unauthorized:
             self.fail("User has future rights but can't access future content.")
 
-        with self.assertRaises(Unauthorized):
+        with browser.expect_unauthorized():
             browser.open(self.past_atfolder)
-        with self.assertRaises(Unauthorized):
+        with browser.expect_unauthorized():
             browser.open(self.past_dxfolder)
 
     @browsing
