@@ -20,8 +20,9 @@ def protect_incative_hook(event):
 
     context = findContext(event.request)
 
-    if api.user.has_permission('Modify portal content', obj=context):
-        return
+    for permission in ['Modify portal content', 'Request review', 'Review portal content']:
+        if api.user.has_permission(permission, obj=context):
+            return
 
     publication_date, expiration_date = getPublicationDates(context)
 
