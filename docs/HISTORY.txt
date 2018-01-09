@@ -5,6 +5,9 @@ Changelog
 1.0.2 (unreleased)
 ------------------
 
+- Improve traversal hook in order not block authorized users from viewing
+  content they should be allowed to view. [mbaechtold]
+
 - Fix failing tests because of recent changes in "ftw.testbrowser". [mbaechtold]
 
 - Test against Plone 4.2. [mbaechtold]
