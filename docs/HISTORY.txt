@@ -2,7 +2,7 @@ Changelog
 =========
 
 
-1.0.2 (unreleased)
+1.0.2 (2018-01-09)
 ------------------
 
 - Improve traversal hook in order not block authorized users from viewing
