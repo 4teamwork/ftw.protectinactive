@@ -5,8 +5,7 @@ Changelog
 1.0.3 (unreleased)
 ------------------
 
-- Nothing changed yet.
-
+- Drop Plone 4.2 compatibility.  [jone]
 
 1.0.2 (2018-01-09)
 ------------------
