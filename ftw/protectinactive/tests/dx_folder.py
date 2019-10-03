@@ -45,4 +45,4 @@ def setup_dx_folder(portal):
     types_tool._setObject('DexterityFolder', fti)
 
     site_fti = types_tool.get('Plone Site')
-    site_fti.allowed_content_types = ('DexterityFolder', 'Folder')
+    site_fti.allowed_content_types = ('DexterityFolder')

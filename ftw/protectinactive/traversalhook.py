@@ -1,10 +1,8 @@
 from AccessControl.unauthorized import Unauthorized
-from DateTime import DateTime
+from datetime import datetime
 from ftw.protectinactive.registry import IProtectInactiveSettings
 from plone.app.dexterity.behaviors.metadata import IPublication
-from plone.dexterity.interfaces import IDexterityContent
 from plone import api
-from Products.ATContentTypes.interfaces.interfaces import IATContentType
 from Products.CMFCore.interfaces import IContentish
 from Products.CMFCore.interfaces import ISiteRoot
 from zExceptions import NotFound
@@ -42,7 +40,7 @@ def isUnreleased(publication_date):
     """ Checks if the publication date is in the future.
         If it is it checks if the user has access to unreleased content.
     """
-    now = DateTime()
+    now = datetime.now()
     return (publication_date and
             now < publication_date and
             not api.user.has_permission('Access future portal content'))
@@ -52,7 +50,7 @@ def isExpired(expiration_date):
     """ Checks if the expiration date has been exceeded.
         If it is it check if the user has access to expired content.
     """
-    now = DateTime()
+    now = datetime.now()
     return (expiration_date and
             now > expiration_date and
             not api.user.has_permission('Access inactive portal content'))
@@ -60,36 +58,12 @@ def isExpired(expiration_date):
 
 def getPublicationDates(context):
     """ Returns the publication and the expiration dates.
-        This method supports both archetypes and dexterity content.
     """
-    if IATContentType.providedBy(context):
-        return getATPublicationDates(context)
-    elif IDexterityContent.providedBy(context):
-        return getDXPublicationDates(context)
-
-    return None, None
-
-
-def getATPublicationDates(context):
-    if not hasattr(context, 'Schema'):
-        return None, None
-
-    effective = context.Schema().getField('effectiveDate').get(context)
-    expiration = context.Schema().getField('expirationDate').get(context)
-    return effective, expiration
-
-
-def getDXPublicationDates(context):
     publication = IPublication(context, None)
     if not publication:  # IPublication is not supported
         return None, None
 
-    effective = publication.effective
-    expiration = publication.expires
-
-    # convert from datetime to DateTime as used by archetypes
-    return DateTime(effective) if effective else None, \
-           DateTime(expiration) if expiration else None
+    return publication.effective, publication.expires
 
 
 def findContext(request):

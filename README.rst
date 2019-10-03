@@ -23,7 +23,7 @@ raises an exception.
 Features
 --------
 * check if content is inactive
-* supports Archetypes and Dexterity content
+* supports Dexterity content
 * respects ``Access inactive portal content`` and ``Access future portal content`` permissions (on site root)
 * configurable exception type
 
@@ -67,7 +67,7 @@ Installation local development-environment
 Compatibility
 -------------
 
-Runs with `Plone <http://www.plone.org/>`_ `4.3.9`.
+Runs with `Plone <http://www.plone.org/>`_ `5.1`.
 
 
 Links
