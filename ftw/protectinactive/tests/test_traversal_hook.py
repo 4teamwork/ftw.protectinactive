@@ -1,5 +1,4 @@
 from AccessControl import Unauthorized
-from DateTime.DateTime import DateTime
 from datetime import datetime
 from datetime import timedelta
 from ftw.builder import Builder
@@ -19,41 +18,27 @@ class TestTraversalHook(FunctionalTestCase):
         setup_dx_folder(self.portal)
 
         # no dates
-        self.no_dates_atfolder = create(Builder('folder'))
         self.no_dates_dxfolder = create(Builder('dx folder'))
 
         # active
-        ateffective = DateTime() - 10
-        atexpiration = DateTime() + 10
         dxeffective = datetime.now() - timedelta(days=10)
         dxexpiration = datetime.now() + timedelta(days=10)
-        self.active_atfolder = create(Builder('folder')
-                                      .having(effectiveDate=ateffective,
-                                              expirationDate=atexpiration))
+
         self.active_dxfolder = create(Builder('dx folder')
                                       .having(effective=dxeffective,
                                               expires=dxexpiration))
 
-        # past content
-        ateffective = DateTime() - 20
-        atexpiration = DateTime() - 10
         dxeffective = datetime.now() - timedelta(days=20)
         dxexpiration = datetime.now() - timedelta(days=10)
-        self.past_atfolder = create(Builder('folder')
-                                    .having(effectiveDate=ateffective,
-                                            expirationDate=atexpiration))
+
         self.past_dxfolder = create(Builder('dx folder')
                                     .having(effective=dxeffective,
                                             expires=dxexpiration))
 
         # future content
-        ateffective = DateTime() + 10
-        atexpiration = DateTime() + 20
         dxeffective = datetime.now() + timedelta(days=10)
         dxexpiration = datetime.now() + timedelta(days=20)
-        self.future_atfolder = create(Builder('folder')
-                                      .having(effectiveDate=ateffective,
-                                              expirationDate=atexpiration))
+
         self.future_dxfolder = create(Builder('dx folder')
                                       .having(effective=dxeffective,
                                               expires=dxexpiration))
@@ -62,13 +47,9 @@ class TestTraversalHook(FunctionalTestCase):
     def test_manager_can_access_everything(self, browser):
         browser.login()
         try:
-            browser.open(self.no_dates_atfolder)
             browser.open(self.no_dates_dxfolder)
-            browser.open(self.active_atfolder)
             browser.open(self.active_dxfolder)
-            browser.open(self.past_atfolder)
             browser.open(self.past_dxfolder)
-            browser.open(self.future_atfolder)
             browser.open(self.future_dxfolder)
         except Unauthorized:
             self.fail("A Manager has to be able to access all content.")
@@ -79,13 +60,9 @@ class TestTraversalHook(FunctionalTestCase):
         browser.login(editor.getId())
 
         try:
-            browser.open(self.no_dates_atfolder)
             browser.open(self.no_dates_dxfolder)
-            browser.open(self.active_atfolder)
             browser.open(self.active_dxfolder)
-            browser.open(self.past_atfolder)
             browser.open(self.past_dxfolder)
-            browser.open(self.future_atfolder)
             browser.open(self.future_dxfolder)
         except Unauthorized:
             self.fail("An Editor has to be able to access the content.")
@@ -96,19 +73,13 @@ class TestTraversalHook(FunctionalTestCase):
         browser.login(user.getId())
 
         try:
-            browser.open(self.no_dates_atfolder)
             browser.open(self.no_dates_dxfolder)
-            browser.open(self.active_atfolder)
             browser.open(self.active_dxfolder)
         except Unauthorized:
             self.fail("A normal user has to be able to access active content.")
 
         with browser.expect_unauthorized():
-            browser.open(self.past_atfolder)
-        with browser.expect_unauthorized():
             browser.open(self.past_dxfolder)
-        with browser.expect_unauthorized():
-            browser.open(self.future_atfolder)
         with browser.expect_unauthorized():
             browser.open(self.future_dxfolder)
 
@@ -120,13 +91,10 @@ class TestTraversalHook(FunctionalTestCase):
         transaction.commit()
 
         try:
-            browser.open(self.past_atfolder)
             browser.open(self.past_dxfolder)
         except Unauthorized:
             self.fail("User has inactive rights but can't access inactive content.")
 
-        with browser.expect_unauthorized():
-            browser.open(self.future_atfolder)
         with browser.expect_unauthorized():
             browser.open(self.future_dxfolder)
 
@@ -138,20 +106,15 @@ class TestTraversalHook(FunctionalTestCase):
         transaction.commit()
 
         try:
-            browser.open(self.future_atfolder)
             browser.open(self.future_dxfolder)
         except Unauthorized:
             self.fail("User has future rights but can't access future content.")
 
         with browser.expect_unauthorized():
-            browser.open(self.past_atfolder)
-        with browser.expect_unauthorized():
             browser.open(self.past_dxfolder)
 
     @browsing
     def test_user_can_access_active_content_within_an_inactive_container(self, browser):
-        self.nested_atfolder = create(Builder('folder')
-                                      .within(self.past_atfolder))
         self.nested_dxfolder = create(Builder('dx folder')
                                       .within(self.past_dxfolder))
 
@@ -159,7 +122,6 @@ class TestTraversalHook(FunctionalTestCase):
         browser.login(user.getId())
 
         try:
-            browser.open(self.nested_atfolder)
             browser.open(self.nested_dxfolder)
         except Unauthorized:
             self.fail("User has to be able to access active content within "

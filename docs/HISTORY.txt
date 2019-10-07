@@ -6,6 +6,8 @@ Changelog
 ------------------
 
 - Drop Plone 4.2 compatibility.  [jone]
+- Add Plone 5.1 support. [tinagerber]
+- Drop archetypes support. [tinagerber]
 
 1.0.2 (2018-01-09)
 ------------------
