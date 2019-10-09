@@ -2,7 +2,7 @@ Changelog
 =========
 
 
-1.0.3 (unreleased)
+1.1.0 (2019-10-09)
 ------------------
 
 - Drop Plone 4.2 compatibility.  [jone]
